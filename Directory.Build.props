@@ -1,0 +1,47 @@
+<Project>
+	<PropertyGroup>
+		<Version>1.0.42</Version>
+		<TargetFramework>net7</TargetFramework>
+		<LangVersion>11.0</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>true</IsPackable>
+		<Copyright>Bnaya Eshet ©</Copyright>
+		<Authors>Bnaya Eshet</Authors>
+		<Company>Bnaya Eshet</Company>
+
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://www.nuget.org/packages/Weknow-BasicExtensions/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/weknow-network/Weknow-BasicExtensions</RepositoryUrl>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeSource>True</IncludeSource>
+		<IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageTags>Weknow, .NET, Core, Extensions</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<RepositoryUrl>https://github.com/weknow-network/wk-net-pkg-common.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="System.Collections" />
+	</ItemGroup>
+</Project>

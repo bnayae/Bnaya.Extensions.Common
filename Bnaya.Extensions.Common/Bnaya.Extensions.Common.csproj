@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>System</RootNamespace>
+    <PackageReleaseNotes>** BREAKING COMPATIBILITY 
+Move to .NET 7.</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>

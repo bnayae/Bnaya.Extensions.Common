@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Weknow_BasicExtensions_Tests</RootNamespace>
+
+    <IsPackable>false</IsPackable>
+
+    <Copyright>Weknow Network ©</Copyright>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <PackageProjectUrl>https://www.nuget.org/packages/Weknow-BasicExtensions/</PackageProjectUrl>
+
+    <RepositoryUrl>https://github.com/weknow-network/Weknow-BasicExtensions</RepositoryUrl>
+
+    <RepositoryType>GitHub</RepositoryType>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+
+    <PackageIconUrl></PackageIconUrl>
+
+    <Authors>Weknow Network</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.5" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="1.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Weknow.Extensions.DependencyInjection\Weknow.Extensions.DependencyInjection.csproj" />
+  </ItemGroup>
+
+</Project>
