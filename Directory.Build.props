@@ -26,7 +26,7 @@
 	<PropertyGroup>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 		<PackageIcon>icon.png</PackageIcon>
-		<PackageTags>Weknow, .NET, Core, Extensions</PackageTags>
+		<PackageTags>Bnaya, .NET, Core, Extensions</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
