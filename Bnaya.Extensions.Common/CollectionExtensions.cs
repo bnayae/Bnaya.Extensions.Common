@@ -2,7 +2,7 @@
 {
     public static class CollectionExtensions
     {
-        #region AsYield
+        #region ToEnumerable
 
         /// <summary>
         /// Converts to yield (IEnumerable) with single item.
@@ -10,20 +10,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="item">The item.</param>
         /// <returns></returns>
-        [Obsolete("Use ToYield()", false)]
-        public static IEnumerable<T> AsYield<T>(this T item) => item.ToYield();
-
-        #endregion // AsYield
-
-        #region ToYield
-
-        /// <summary>
-        /// Converts to yield (IEnumerable) with single item.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="item">The item.</param>
-        /// <returns></returns>
-        public static IEnumerable<T> ToYield<T>(this T item)
+        public static IEnumerable<T> ToEnumerable<T>(this T item)
         {
             yield return item;
         }
@@ -36,7 +23,7 @@
         /// <param name="item1">The item1.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public static IEnumerable<T> ToYield<T>(this IEnumerable<T> source, T item1, params T[] items)
+        public static IEnumerable<T> ToEnumerable<T>(this IEnumerable<T> source, T item1, params T[] items)
         {
             foreach (var element in source)
             {
@@ -58,7 +45,7 @@
         /// <param name="item2">The item2.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public static IEnumerable<T> ToYield<T>(this T item1, T item2, params T[] items)
+        public static IEnumerable<T> ToEnumerable<T>(this T item1, T item2, params T[] items)
         {
             yield return item1;
             yield return item2;
@@ -75,7 +62,7 @@
         /// <param name="item">The item.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public static IEnumerable<T> ToYield<T>(this T item, IEnumerable<T> items)
+        public static IEnumerable<T> ToEnumerable<T>(this T item, IEnumerable<T> items)
         {
             yield return item;
             foreach (var element in items)
@@ -92,7 +79,7 @@
         /// <param name="item2">The item2.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public static IEnumerable<T> ToYield<T>(this T item1, T item2, IEnumerable<T> items)
+        public static IEnumerable<T> ToEnumerable<T>(this T item1, T item2, IEnumerable<T> items)
         {
             yield return item1;
             yield return item2;
@@ -111,7 +98,7 @@
         /// <param name="item3">The item3.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public static IEnumerable<T> ToYield<T>(this T item1, T item2, T item3, IEnumerable<T> items)
+        public static IEnumerable<T> ToEnumerable<T>(this T item1, T item2, T item3, IEnumerable<T> items)
         {
             yield return item1;
             yield return item2;
@@ -132,7 +119,7 @@
         /// <param name="item4">The item4.</param>
         /// <param name="items">The items.</param>
         /// <returns></returns>
-        public static IEnumerable<T> ToYield<T>(this T item1, T item2, T item3, T item4, IEnumerable<T> items)
+        public static IEnumerable<T> ToEnumerable<T>(this T item1, T item2, T item3, T item4, IEnumerable<T> items)
         {
             yield return item1;
             yield return item2;
@@ -144,6 +131,6 @@
             }
         }
 
-        #endregion // ToYield
+        #endregion // ToEnumerable
     }
 }

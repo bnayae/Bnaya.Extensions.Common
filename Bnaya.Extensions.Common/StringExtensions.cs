@@ -15,7 +15,6 @@ namespace System
 (?<=[^A-Z])(?=[A-Z]) |
 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
 
-
         #region ToCamelCase
 
         /// <summary>
