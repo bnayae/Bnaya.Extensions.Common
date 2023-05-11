@@ -1,6 +1,4 @@
-# Weknow-BasicExtensions 
-[![Build & Deploy NuGet](https://github.com/weknow-network/Weknow-BasicExtensions/actions/workflows/Deploy.yml/badge.svg)](https://github.com/weknow-network/Weknow-BasicExtensions/actions/workflows/Deploy.yml)
-[![NuGet](https://img.shields.io/nuget/v/Weknow-BasicExtensions.svg)](https://www.nuget.org/packages/Weknow-BasicExtensions/) 
+# Bnaya.Extensions.Common
 
 Set of basic extensions. 
 
