@@ -1,5 +1,9 @@
 # Bnaya.Extensions.Common
 
+[![Build & Deploy NuGet](https://github.com/bnayae/Bnaya.Extensions.Common/actions/workflows/Deploy.yml/badge.svg)](https://github.com/bnayae/Bnaya.Extensions.Common/actions/workflows/Deploy.yml)  
+
+[![NuGet](https://img.shields.io/nuget/v/Bnaya.Extensions.Common.svg)](https://www.nuget.org/packages/Bnaya.Extensions.Common/)
+
 Set of basic extensions. 
 
 ## String Extensions
