@@ -1,9 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <RootNamespace>System</RootNamespace>
-    <PackageReleaseNotes>** BREAKING COMPATIBILITY 
-Move to .NET 7.</PackageReleaseNotes>
-  </PropertyGroup>
+	<PropertyGroup>
+		<RootNamespace>System</RootNamespace>
+		<PackageReleaseNotes>
+			** BREAKING COMPATIBILITY
+			Move to .NET 7.
+		</PackageReleaseNotes>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
 
+	<ItemGroup>
+		<None Include="docs\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="docs\" />
+	</ItemGroup>
 </Project>

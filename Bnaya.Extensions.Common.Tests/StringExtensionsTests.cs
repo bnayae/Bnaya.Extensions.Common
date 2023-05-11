@@ -95,7 +95,7 @@ namespace Bnaya.Extensions.Common.Tests
         [InlineData(null, "")]
         public void String_ToPascalCase_Test_Succeed(string input, string expected)
         {
-            string result = input.ToPascalCase();
+            string result = input.ToPascal();
             _outputHelper.WriteLine($"'{input}' = '{result}'");
             Assert.Equal(expected, result);
         }
@@ -118,7 +118,7 @@ namespace Bnaya.Extensions.Common.Tests
         [InlineData(null, "")]
         public void String_ToCamelCase_Test_Succeed(string input, string expected)
         {
-            string result = input.ToCamelCase();
+            string result = input.ToCamel();
             _outputHelper.WriteLine($"'{input}' = '{result}'");
             Assert.Equal(expected, result);
         }

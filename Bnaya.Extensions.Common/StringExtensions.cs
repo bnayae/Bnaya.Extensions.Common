@@ -15,14 +15,14 @@ namespace System
 (?<=[^A-Z])(?=[A-Z]) |
 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
 
-        #region ToCamelCase
+        #region ToCamel
 
         /// <summary>
         /// Converts to camelCase.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns></returns>
-        public static string ToCamelCase(this string text)
+        public static string ToCamel(this string text)
         {
             if (string.IsNullOrEmpty(text))
                 return string.Empty;
@@ -38,16 +38,16 @@ namespace System
             return result;
         }
 
-        #endregion // ToCamelCase
+        #endregion // ToCamel
 
-        #region ToPascalCase
+        #region ToPascal
 
         /// <summary>
         /// Converts to PascalCase.
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns></returns>
-        public static string ToPascalCase(this string text)
+        public static string ToPascal(this string text)
         {
             if (string.IsNullOrEmpty(text))
                 return string.Empty;
@@ -62,7 +62,7 @@ namespace System
             return string.Join("", parts.Select(m => ToPascalSimple(m)));
         }
 
-        #endregion // ToPascalCase
+        #endregion // ToPascal
 
         #region ToSCREAMING
 
