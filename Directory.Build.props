@@ -11,8 +11,9 @@
 		<Company>Bnaya Eshet</Company>
 
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://www.nuget.org/packages/Weknow-BasicExtensions/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/weknow-network/Weknow-BasicExtensions</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/bnayae/Bnaya.Extensions.Common</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/bnayae/Bnaya.Extensions.Common</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -35,11 +36,6 @@
 			<PackagePath></PackagePath>
 		</None>
 	</ItemGroup>
-
-	<PropertyGroup>
-		<RepositoryUrl>https://github.com/weknow-network/wk-net-pkg-common.git</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-	</PropertyGroup>
 
 	<ItemGroup>
 		<Using Include="System.Collections" />
