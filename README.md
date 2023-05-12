@@ -144,3 +144,78 @@ Check the following
 > var r4 = arr[..2].ToEnumerable(3, 4, 5, 6, 7, 8, 9);
 > Assert.Equal(arr, r4);
 > ```
+
+## Disposables
+
+Disposable pattern (based on Reactive Extensions)
+
+### Disposable.Empty
+
+Disposable which do noting on disposal.  
+Useful when the needs for disposable is conditional (under the using pattern).
+
+Sample:
+
+> ``` cs
+> using var dsp = factory?.GetDisposable() ?? isposable.Empty;
+> ``` 
+
+### Disposable.Create
+
+Creates a disposable object that invokes the specified action when disposed.
+
+Sample:
+
+> ``` cs
+> ILog logger = A.Fake<ILog>();
+> using (var d = Disposable.Create(() => logger.Log("disposed")))
+> {
+>     A.CallTo(() => logger.Log(A<string>.Ignored))
+>         .MustNotHaveHappened();
+> }
+> A.CallTo(() => logger.Log(A<string?>.Ignored))
+>     .MustHaveHappenedOnceExactly();
+> ``` 
+
+### Disposable.CreateStack
+
+Maintain a scoped state (which can affect parent state on exit by a custom logic).  
+
+Can be useful to maintain state with in a Visitor pattern (or functional programming).
+
+Sample:
+
+> ``` cs
+>     IStackCancelable<int> d1;
+>     using (d1 = Disposable.CreateStack<int>(10))
+>     {
+>         Assert.Equal(10, d1.State);
+>         using (d1.Push(50))
+>         {
+>             Assert.Equal(50, d1.State);
+>         }
+>         using (d1.Push(2, (prv, inScope) => inScope * 2 + prv))
+>         {
+>             Assert.Equal(2, d1.State);
+>         }
+>         Assert.Equal(14, d1.State); // the state which was calculate when the scope ends
+>         using (d1.Push(m => m * 2)) // calculate from current state
+>         {
+>             Assert.Equal(28, d1.State);
+>         }
+>         Assert.Equal(14, d1.State);
+>         using (d1.Push(m => m * 2))
+>         {
+>             Assert.Equal(28, d1.State);
+>             using (d1.Push(m => m * 2, (prv, inScope) => inScope + 1))
+>             {
+>                 Assert.Equal(56, d1.State);
+>             }
+>             Assert.Equal(57, d1.State);
+>         }
+>         Assert.Equal(14, d1.State);
+>         Assert.False(d1.IsDisposed);
+>     }
+>     Assert.True(d1.IsDisposed);
+> }
+> ```
