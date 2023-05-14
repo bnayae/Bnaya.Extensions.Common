@@ -157,6 +157,10 @@ namespace Bnaya.Extensions.Common.Tests
             using (var root = stackCollection.Add(10, 11, 12))
             {
                 Assert.Equal(3, root.Count());
+                foreach (var item in (IEnumerable)root)
+                {
+                    _outputHelper.WriteLine(item.ToString());
+                }
             }
         }
 
