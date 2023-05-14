@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 
 using Bnaya.Extensions.Common.Disposables;
 
-namespace System.Disposables.Stack;
+namespace System.Disposables;
 
 /// <summary>
 /// Build immutable list with correlate to the Stack
@@ -59,7 +59,7 @@ public sealed class CollectionDisposable<TState> :
     public CancelableCollectionBase<IImmutableList<TState>, TState> Add(TState item, params TState[] more)
     {
         IImmutableList<TState> newState = _stack.State.Add(item);
-        foreach (var m in more ?? Array.Empty<TState>()) 
+        foreach (var m in more ?? Array.Empty<TState>())
         {
             newState = newState.Add(m);
         }
@@ -92,7 +92,7 @@ public sealed class CollectionDisposable<TState> :
     /// Finalizes this instance.
     /// </summary>
     ~CollectionDisposable()
-    { 
+    {
         _stack.Dispose();
     }
 

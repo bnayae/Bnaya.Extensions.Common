@@ -1,6 +1,4 @@
-
-using System.Collections.Immutable;
-using System.Disposables.Stack;
+using System.Disposables;
 
 using Bnaya.Extensions.Common.Disposables;
 
@@ -131,7 +129,7 @@ namespace Bnaya.Extensions.Common.Tests
                 using (var state = stackCollection.Add(30))
                 {
                     Assert.True(state.SequenceEqual(10.ToEnumerable(30)));
-                    using (var state1 = stackCollection.Add(5,6, 7))
+                    using (var state1 = stackCollection.Add(5, 6, 7))
                     {
                         Assert.True(state1.SequenceEqual(10.ToEnumerable(30, 5, 6, 7)));
                     }

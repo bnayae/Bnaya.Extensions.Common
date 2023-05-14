@@ -5,7 +5,7 @@
 
 using Bnaya.Extensions.Common.Disposables;
 
-namespace System.Disposables.Stack;
+namespace System.Disposables;
 
 /// <summary>
 /// Stack of disposables

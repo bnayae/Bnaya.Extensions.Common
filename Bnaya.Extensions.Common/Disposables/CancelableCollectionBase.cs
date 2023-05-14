@@ -21,7 +21,7 @@ public abstract class CancelableCollectionBase<TState, TItem> : CancelableBase<T
     public IEnumerator<TItem> GetEnumerator()
     {
         foreach (var item in State)
-        { 
+        {
             yield return item;
         }
     }

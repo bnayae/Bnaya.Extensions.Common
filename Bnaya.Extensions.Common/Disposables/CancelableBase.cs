@@ -84,7 +84,7 @@ public abstract class CancelableBase<TState> : ICancelable
     /// </summary>
     /// <param name="disposing">if set to <c>true</c> [disposing].</param>
     /// <returns></returns>
-#pragma warning disable S2953 
+#pragma warning disable S2953
     protected abstract void Dispose(bool disposing);
 #pragma warning restore S2953 
 
