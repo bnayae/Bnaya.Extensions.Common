@@ -69,6 +69,10 @@ namespace Bnaya.Extensions.Common.Tests
             {
                 _outputHelper.WriteLine(d1.ToString());
                 Assert.Equal(10, d1.State);
+                using (var state = d1.Push())
+                {
+                    Assert.Equal(10, d1.State);
+                }
                 using (var state = d1.Push(50))
                 {
                     Assert.Equal(50, d1.State);
@@ -142,5 +146,34 @@ namespace Bnaya.Extensions.Common.Tests
         }
 
         #endregion // DisposableStackCollection_Test
+
+        #region DisposableStackCollection_Enumerable_Test
+
+        [Fact]
+        public void DisposableStackCollection_Enumerable_Test()
+        {
+            CollectionDisposable<int> stackCollection;
+            using (stackCollection = Disposable.CreateCollection<int>())
+            using (var root = stackCollection.Add(10, 11, 12))
+            {
+                Assert.Equal(3, root.Count());
+            }
+        }
+
+        #endregion // DisposableStackCollection_Enumerable_Test
+
+        #region DisposableStack_Test
+
+        [Fact]
+        public void DisposableStack_Error_Test()
+        {
+            StackDisposable<int> d1;
+            using (d1 = Disposable.CreateStack<int>(10))
+            {
+            }
+            Assert.Throws<ObjectDisposedException>(() => d1.Push());
+        }
+
+        #endregion // DisposableStack_Test
     }
 }

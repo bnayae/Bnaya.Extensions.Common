@@ -105,8 +105,10 @@ namespace Bnaya.Extensions.Common.Tests
         #region String_ToCamelCase_Test_Succeed
 
         [Theory]
+        [InlineData(" BnayaEshet", "bnayaEshet")]
         [InlineData("BnayaEshet", "bnayaEshet")]
         [InlineData("bnayaEshet", "bnayaEshet")]
+        [InlineData(" bnayaEshet", "bnayaEshet")]
         [InlineData("bnaya Eshet", "bnayaEshet")]
         [InlineData("bnaya-Eshet", "bnayaEshet")]
         [InlineData("bnaya_Eshet", "bnayaEshet")]
