@@ -140,7 +140,7 @@ public sealed class StackDisposable<TState> : CancelableBase<TState>
     /// <returns>
     /// A <see cref="System.String" /> that represents this instance.
     /// </returns>
-    public override string ToString() => Current.State.ToString();
+    public override string ToString() => Current.State?.ToString() ?? string.Empty;
 
     #endregion // override ToString
 }

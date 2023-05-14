@@ -109,24 +109,4 @@ public sealed class CollectionDisposable<TState> :
     public override string ToString() => string.Join(',', _stack.State);
 
     #endregion // override ToString
-
-    #region IEnumerable implementation
-
-    /// <summary>
-    /// Returns an enumerator that iterates through the collection.
-    /// </summary>
-    /// <returns>
-    /// An enumerator that can be used to iterate through the collection.
-    /// </returns>
-    public IEnumerator<TState> GetEnumerator() => _stack.State.GetEnumerator();
-
-    /// <summary>
-    /// Returns an enumerator that iterates through a collection.
-    /// </summary>
-    /// <returns>
-    /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
-    /// </returns>
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-    #endregion // IEnumerable implementation
 }
