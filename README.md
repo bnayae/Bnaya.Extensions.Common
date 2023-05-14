@@ -243,7 +243,7 @@ Maintain a scoped state (which can affect parent state on exit by a custom logic
 
 Can be useful to maintain state with in a Visitor pattern (or functional programming).
 
-<details open><summary>Sample</summary>
+<details><summary>Sample</summary>
 <blockquote>
 
 ``` cs
@@ -282,6 +282,49 @@ using (d1 = Disposable.CreateStack<int>(10))
     Assert.False(d1.IsDisposed);
 }
 Assert.True(d1.IsDisposed);
+```
+
+</blockquote>
+</details>
+
+### Disposable.CreateCollection
+
+Creates a collection builder, which aware of the stack context.  
+It'll remove items from the collection on stack frame disposal
+
+<details><summary>Sample</summary>
+<blockquote>
+
+``` cs
+CollectionDisposable<int> stackCollection;
+using (stackCollection = Disposable.CreateCollection<int>())
+using (var root = stackCollection.Add(10))
+{
+    _outputHelper.WriteLine(stackCollection.ToString());
+    _outputHelper.WriteLine(root.ToString());
+    Assert.True(10.ToEnumerable().SequenceEqual(stackCollection.State));
+    using (var state = stackCollection.Add(50))
+    {
+        Assert.True(state.SequenceEqual(10.ToEnumerable(50)));
+    }
+    using (var state = stackCollection.Add(2))
+    {
+        Assert.True(state.SequenceEqual(10.ToEnumerable(2)));
+    }
+    Assert.True(stackCollection.SequenceEqual(10.ToEnumerable()));
+    using (var state = stackCollection.Add(30))
+    {
+        Assert.True(state.SequenceEqual(10.ToEnumerable(30)));
+        using (var state1 = stackCollection.Add(5,6, 7))
+        {
+            Assert.True(state1.SequenceEqual(10.ToEnumerable(30, 5, 6, 7)));
+        }
+        Assert.True(stackCollection.SequenceEqual(10.ToEnumerable(30)));
+    }
+    Assert.True(stackCollection.SequenceEqual(10.ToEnumerable()));
+    Assert.False(stackCollection.IsDisposed);
+}
+Assert.True(stackCollection.IsDisposed);
 ```
 
 </blockquote>
