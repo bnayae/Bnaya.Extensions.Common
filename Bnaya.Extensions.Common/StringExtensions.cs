@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace System
@@ -32,7 +33,20 @@ namespace System
                 return ToCamelSimple(text);
             }
 
-            string result = string.Join("", parts.Select((m, i) => i == 0 ? ToCamelSimple(m) : ToPascalSimple(m)));
+            StringBuilder Strategy(StringBuilder acc, string m)
+            {
+                if (acc.Length == 0)
+                {
+                    var r = ToCamelSimple(m);
+                    if (string.IsNullOrEmpty(m))
+                        return acc;
+                    return acc.Append(r);
+                }
+                var res = ToPascalSimple(m);
+                return acc.Append(res);
+            }
+
+            string result = parts.Aggregate(new StringBuilder(text.Length), Strategy).ToString();
             return result;
         }
 
@@ -57,7 +71,14 @@ namespace System
                 return ToPascalSimple(text);
             }
 
-            return string.Join("", parts.Select(m => ToPascalSimple(m)));
+            StringBuilder Strategy(StringBuilder acc, string m)
+            {
+                var res = ToPascalSimple(m);
+                return acc.Append(res);
+            }
+
+            string result = parts.Aggregate(new StringBuilder(text.Length), Strategy).ToString();
+            return result;
         }
 
         #endregion // ToPascal
@@ -76,38 +97,38 @@ namespace System
                 return string.Empty;
 
             (StringBuilder Result, char Last) aggregate = text.Trim().Aggregate(
-               (Result: new StringBuilder(text.Length), Last: char.MinValue),
-               (acc, current) =>
-               {
-                   char CURRENT = char.ToUpper(current);
-                   var (result, last) = acc;
-                   bool isCurWS = char.IsWhiteSpace(current);
-                   if (isCurWS && result.Length != 0)
-                   {
-                       if (char.IsLetter(last) || char.IsDigit(last))
-                           return (result.Append(separator), separator);
-                       else
-                           return (result, last);
-                   }
-                   if (result.Length == 0)
-                   {
-                       if (isCurWS)
-                           return (result, char.MinValue);
-                       else
-                           return (result.Append(CURRENT), current);
-                   }
+               (Result: new StringBuilder(text.Length), Last: char.MinValue), Strategy);
 
-                   if (current == separator || last == separator)
-                   {
-                       if (current == last)
-                           return (result, current);
-                       return (result.Append(CURRENT), current);
-                   }
-                   if ((char.IsLower(last) || !char.IsLetter(last)) && char.IsUpper(current))
-                       return (result.Append(separator).Append(CURRENT), current);
-                   return (result.Append(CURRENT), current);
-               });
+            (StringBuilder Result, char Last) Strategy((StringBuilder Result, char Last) acc, char current)
+            {
+                char CURRENT = char.ToUpper(current);
+                var (result, last) = acc;
+                bool isCurWS = char.IsWhiteSpace(current);
+                if (isCurWS && result.Length != 0)
+                {
+                    if (char.IsLetter(last) || char.IsDigit(last))
+                        return (result.Append(separator), separator);
+                    else
+                        return (result, last);
+                }
+                if (result.Length == 0)
+                {
+                    if (isCurWS)
+                        return (result, char.MinValue);
+                    else
+                        return (result.Append(CURRENT), current);
+                }
 
+                if (current == separator || last == separator)
+                {
+                    if (current == last)
+                        return (result, current);
+                    return (result.Append(CURRENT), current);
+                }
+                if ((char.IsLower(last) || !char.IsLetter(last)) && char.IsUpper(current))
+                    return (result.Append(separator).Append(CURRENT), current);
+                return (result.Append(CURRENT), current);
+            }
 
             return aggregate.Result.ToString();
         }
@@ -127,36 +148,37 @@ namespace System
             if (string.IsNullOrEmpty(text))
                 return string.Empty;
 
-            (StringBuilder Result, char Last) aggregate = text.Aggregate(
-               (Result: new StringBuilder(text.Length), Last: char.MinValue),
-               (acc, current) =>
-               {
-                   char lowerCurrent = char.ToLower(current);
-                   var (result, last) = acc;
-                   bool ignore = !char.IsDigit(current) && !char.IsLetter(current) || current == '_';
-                   if (ignore && result.Length != 0)
-                   {
-                       return (result, separator);
-                   }
-                   if (result.Length == 0)
-                   {
-                       if (ignore)
-                           return (result, char.MinValue);
-                       else
-                           return (result.Append(lowerCurrent), current);
-                   }
+            (StringBuilder Result, char Last) Strategy((StringBuilder Result, char Last) acc, char current)
+            {
+                char lowerCurrent = char.ToLower(current);
+                var (result, last) = acc;
+                bool ignore = !char.IsDigit(current) && !char.IsLetter(current) || current == '_';
+                if (ignore && result.Length != 0)
+                {
+                    return (result, separator);
+                }
+                if (result.Length == 0)
+                {
+                    if (ignore)
+                        return (result, char.MinValue);
+                    else
+                        return (result.Append(lowerCurrent), current);
+                }
 
-                   if (current == separator || last == separator)
-                   {
-                       if (current == last)
-                           return (result, current);
-                       else if (last == separator)
-                           return (result.Append(separator).Append(lowerCurrent), current);
-                   }
-                   if (char.IsUpper(current) && !char.IsUpper(last))
-                       return (result.Append(separator).Append(lowerCurrent), current);
-                   return (result.Append(lowerCurrent), current);
-               });
+                if (current == separator || last == separator)
+                {
+                    if (current  == last)
+                        return (result, current);
+                    else if (last == separator)
+                        return (result.Append(separator).Append(lowerCurrent), current);
+                }
+                if (char.IsUpper(current) && !char.IsUpper(last))
+                    return (result.Append(separator).Append(lowerCurrent), current);
+                return (result.Append(lowerCurrent), current);
+            }
+
+            (StringBuilder Result, char Last) aggregate = text.Aggregate(
+                  (Result: new StringBuilder(text.Length), Last: char.MinValue), Strategy);
 
 
             return aggregate.Result.ToString();
