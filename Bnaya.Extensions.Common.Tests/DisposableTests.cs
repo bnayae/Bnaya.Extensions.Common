@@ -1,4 +1,7 @@
 
+using System.Collections.Immutable;
+using System.Disposables.Stack;
+
 using Bnaya.Extensions.Common.Disposables;
 
 using FakeItEasy;
@@ -46,6 +49,7 @@ namespace Bnaya.Extensions.Common.Tests
         #region Disposable_Empty_Test
 
         [Fact]
+#pragma warning disable S2699 // Tests should include assertions
         public void Disposable_Empty_Test()
         {
             using (var d = Disposable.Empty)
@@ -53,6 +57,7 @@ namespace Bnaya.Extensions.Common.Tests
                 // do nothing
             }
         }
+#pragma warning restore S2699 // Tests should include assertions
 
         #endregion // Disposable_Empty_Test
 
@@ -61,9 +66,10 @@ namespace Bnaya.Extensions.Common.Tests
         [Fact]
         public void DisposableStack_Test()
         {
-            StackCancelable<int> d1;
+            StackDisposable<int> d1;
             using (d1 = Disposable.CreateStack<int>(10))
             {
+                _outputHelper.WriteLine(d1.ToString());
                 Assert.Equal(10, d1.State);
                 using (var state = d1.Push(50))
                 {
@@ -100,5 +106,43 @@ namespace Bnaya.Extensions.Common.Tests
         }
 
         #endregion // DisposableStack_Test
+
+        #region DisposableStackCollection_Test
+
+        [Fact]
+        public void DisposableStackCollection_Test()
+        {
+            CollectionDisposable<int> stackCollection;
+            using (stackCollection = Disposable.CreateCollection<int>())
+            using (var root = stackCollection.Add(10))
+            {
+                _outputHelper.WriteLine(stackCollection.ToString());
+                _outputHelper.WriteLine(root.ToString());
+                Assert.True(10.ToEnumerable().SequenceEqual(stackCollection.State));
+                using (var state = stackCollection.Add(50))
+                {
+                    Assert.True(state.SequenceEqual(10.ToEnumerable(50)));
+                }
+                using (var state = stackCollection.Add(2))
+                {
+                    Assert.True(state.SequenceEqual(10.ToEnumerable(2)));
+                }
+                Assert.True(stackCollection.SequenceEqual(10.ToEnumerable()));
+                using (var state = stackCollection.Add(30))
+                {
+                    Assert.True(state.SequenceEqual(10.ToEnumerable(30)));
+                    using (var state1 = stackCollection.Add(5,6, 7))
+                    {
+                        Assert.True(state1.SequenceEqual(10.ToEnumerable(30, 5, 6, 7)));
+                    }
+                    Assert.True(stackCollection.SequenceEqual(10.ToEnumerable(30)));
+                }
+                Assert.True(stackCollection.SequenceEqual(10.ToEnumerable()));
+                Assert.False(stackCollection.IsDisposed);
+            }
+            Assert.True(stackCollection.IsDisposed);
+        }
+
+        #endregion // DisposableStackCollection_Test
     }
 }

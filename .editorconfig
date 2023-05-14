@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# RCS1142: Add 'typeparam' element to documentation comment.
+dotnet_diagnostic.RCS1142.severity = none

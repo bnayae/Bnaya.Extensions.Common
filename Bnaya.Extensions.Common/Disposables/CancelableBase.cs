@@ -3,6 +3,8 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
+#pragma warning disable S3881 // "IDisposable" should be implemented correctly
+
 namespace Bnaya.Extensions.Common.Disposables;
 
 /// <summary>
@@ -31,7 +33,7 @@ public abstract class CancelableBase<TState> : ICancelable
     #region Casting overload
 
     /// <summary>
-    /// Performs an implicit conversion from <see cref="CancelableBase{TState}"/> to <see cref="TState"/>.
+    /// Performs an implicit conversion from.
     /// </summary>
     /// <param name="instance">The instance.</param>
     /// <returns>
@@ -48,13 +50,6 @@ public abstract class CancelableBase<TState> : ICancelable
     /// </summary>
     /// <returns></returns>
     ~CancelableBase() => OnDispose(false);
-
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-    /// </summary>
-    /// <param name="disposing">if set to <c>true</c> [disposing].</param>
-    /// <returns></returns>
-    protected abstract void Dispose(bool disposing);
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -83,6 +78,15 @@ public abstract class CancelableBase<TState> : ICancelable
         // Suppress finalization.
         GC.SuppressFinalize(this);
     }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    /// <param name="disposing">if set to <c>true</c> [disposing].</param>
+    /// <returns></returns>
+#pragma warning disable S2953 
+    protected abstract void Dispose(bool disposing);
+#pragma warning restore S2953 
 
     #endregion // Dispose Pattern
 }

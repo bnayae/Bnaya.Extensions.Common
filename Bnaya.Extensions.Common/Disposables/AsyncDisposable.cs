@@ -3,9 +3,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Bnaya.Extensions.Common.Disposables
 {
     public static class AsyncDisposable
@@ -36,9 +33,13 @@ namespace Bnaya.Extensions.Common.Disposables
 
             public AnonymousAsyncDisposable(Func<ValueTask> dispose, bool useFinalizerTrigger = false)
             {
-                if (!useFinalizerTrigger)
-                    GC.SuppressFinalize(this);
                 _dispose = dispose;
+                if (!useFinalizerTrigger)
+                {
+#pragma warning disable S3971 
+                    GC.SuppressFinalize(this);
+#pragma warning restore S3971 
+                }
             }
 
             public async ValueTask DisposeAsync()

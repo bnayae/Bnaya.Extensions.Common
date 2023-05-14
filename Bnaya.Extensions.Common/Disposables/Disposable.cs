@@ -3,7 +3,7 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Net.NetworkInformation;
+using System.Disposables.Stack;
 
 namespace Bnaya.Extensions.Common.Disposables
 {
@@ -94,7 +94,8 @@ namespace Bnaya.Extensions.Common.Disposables
         #region CreateStack
 
         /// <summary>
-        /// Creates a disposable object that invokes the specified action when disposed.
+        /// maintain state which aware of the stack frame disposal.
+        /// State will be return to previous or alter on a disposal of a stack frame.
         /// </summary>
         /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="state">The state to be passed to the action.</param>
@@ -104,7 +105,7 @@ namespace Bnaya.Extensions.Common.Disposables
         /// </returns>
         /// <exception cref="System.ArgumentNullException">dispose</exception>
         /// <exception cref="ArgumentNullException"><paramref name="dispose" /> is <c>null</c>.</exception>
-        public static StackCancelable<TState> CreateStack<TState>(TState state, Action<TState>? dispose = null)
+        public static StackDisposable<TState> CreateStack<TState>(TState state, Action<TState>? dispose = null)
         {
             Action<TState> cleanup = dispose ?? ((_) => { });
 
@@ -112,5 +113,25 @@ namespace Bnaya.Extensions.Common.Disposables
         }
 
         #endregion // CreateStack
+
+        #region CreateStackCollection
+
+        /// <summary>
+        /// Creates a collection builder, which aware of the stack context.
+        /// It'll remove items from the collection on stack frame disposal
+        /// </summary>
+        /// <typeparam name="TState">The type of the state.</typeparam>
+        /// <param name="dispose">Action to run during the first call to <see cref="IDisposable.Dispose" />. The action is guaranteed to be run at most once.</param>
+        /// <returns>
+        /// The disposable object that runs the given action upon disposal.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">dispose</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="dispose" /> is <c>null</c>.</exception>
+        public static CollectionDisposable<TState> CreateCollection<TState>(Action? dispose = null)
+        {
+            return new CollectionDisposable<TState>(dispose);
+        }
+
+        #endregion // CreateStackCollection
     }
 }

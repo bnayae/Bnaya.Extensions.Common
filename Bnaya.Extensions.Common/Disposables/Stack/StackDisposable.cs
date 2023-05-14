@@ -3,17 +3,18 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-namespace Bnaya.Extensions.Common.Disposables;
+using Bnaya.Extensions.Common.Disposables;
+
+namespace System.Disposables.Stack;
 
 /// <summary>
 /// Stack of disposables
 /// </summary>
 /// <typeparam name="TState">The type of the state.</typeparam>
-/// <seealso cref="Bnaya.Extensions.Common.Disposables.StackCancelable&lt;TState&gt;" />
 /// <remarks>
 /// Not thread safe: won't work well under multi thread environment (without proper synchronization).
 /// </remarks>
-internal sealed class StackDisposable<TState> : StackCancelable<TState>
+public sealed class StackDisposable<TState> : CancelableBase<TState>
 {
     private sealed record StackItem(CancelableBase<TState> Instance, Func<TState, TState, TState>? Restate = null);
     private readonly Stack<StackItem> _stack = new Stack<StackItem>();
@@ -55,8 +56,8 @@ internal sealed class StackDisposable<TState> : StackCancelable<TState>
     /// - previous disposal
     /// return the value which will be set to the previous disposal after it become the current again</param>
     /// <returns></returns>
-    /// <exception cref="System.ObjectDisposedException">StackDisposable</exception>
-    public override CancelableBase<TState> Push(Func<TState, TState>? state = null, Func<TState, TState, TState>? dispose = null)
+    /// <exception cref="ObjectDisposedException">StackDisposable</exception>
+    public CancelableBase<TState> Push(Func<TState, TState>? state = null, Func<TState, TState, TState>? dispose = null)
     {
         if (IsDisposed)
             throw new ObjectDisposedException(nameof(StackDisposable<TState>));
@@ -80,12 +81,11 @@ internal sealed class StackDisposable<TState> : StackCancelable<TState>
     /// return the value which will be set to the previous disposal after it become the current again
     /// </param>
     /// <returns></returns>
-    public override CancelableBase<TState> Push(TState state, Func<TState, TState, TState>? dispose = null)
+    public CancelableBase<TState> Push(TState state, Func<TState, TState, TState>? dispose = null)
     {
         if (IsDisposed)
             throw new ObjectDisposedException(nameof(StackDisposable<TState>));
 
-        TState curState = Current.State;
         var newDisposable = Disposable.Create<TState>(state);
         _stack.Push(new StackItem(newDisposable, dispose));
 
@@ -131,4 +131,16 @@ internal sealed class StackDisposable<TState> : StackCancelable<TState>
     }
 
     #endregion // Dispose Pattern
+
+    #region override ToString
+
+    /// <summary>
+    /// Converts to string.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="System.String" /> that represents this instance.
+    /// </returns>
+    public override string ToString() => Current.State.ToString();
+
+    #endregion // override ToString
 }

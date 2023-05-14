@@ -3,8 +3,6 @@
 // The .NET Foundation licenses this file to you under the MIT License.
 // See the LICENSE file in the project root for more information. 
 
-using System.Collections.Concurrent;
-
 namespace Bnaya.Extensions.Common.Disposables;
 
 
@@ -22,9 +20,13 @@ internal sealed class AnonymousDisposable : ICancelable
     /// <param name="useFinalizerTrigger">if set to <c>true</c> [use finalizer trigger].</param>
     public AnonymousDisposable(Action dispose, bool useFinalizerTrigger = false)
     {
-        if (!useFinalizerTrigger)
-            GC.SuppressFinalize(this);
         _dispose = dispose;
+        if (!useFinalizerTrigger)
+        {
+#pragma warning disable S3971
+            GC.SuppressFinalize(this);
+#pragma warning restore S3971
+        }
     }
 
     /// <summary>
