@@ -247,38 +247,41 @@ Can be useful to maintain state with in a Visitor pattern (or functional program
 <blockquote>
 
 ``` cs
-    IStackCancelable<int> d1;
-    using (d1 = Disposable.CreateStack<int>(10))
+StackCancelable<int> d1;
+using (d1 = Disposable.CreateStack<int>(10))
+{
+    Assert.Equal(10, d1.State);
+    using (var state = d1.Push(50))
     {
-        Assert.Equal(10, d1.State);
-        using (d1.Push(50))
-        {
-            Assert.Equal(50, d1.State);
-        }
-        using (d1.Push(2, (prv, inScope) => inScope * 2 + prv))
-        {
-            Assert.Equal(2, d1.State);
-        }
-        Assert.Equal(14, d1.State); // the state which was calculate when the scope ends
-        using (d1.Push(m => m * 2)) // calculate from current state
-        {
-            Assert.Equal(28, d1.State);
-        }
-        Assert.Equal(14, d1.State);
-        using (d1.Push(m => m * 2))
-        {
-            Assert.Equal(28, d1.State);
-            using (d1.Push(m => m * 2, (prv, inScope) => inScope + 1))
-            {
-                Assert.Equal(56, d1.State);
-            }
-            Assert.Equal(57, d1.State);
-        }
-        Assert.Equal(14, d1.State);
-        Assert.False(d1.IsDisposed);
+        Assert.Equal(50, d1.State);
+        Assert.Equal(50, state.State);
+        int i = state;
+        Assert.Equal(50, i);
     }
-    Assert.True(d1.IsDisposed);
+    using (var state = d1.Push(2, (prv, inScope) => inScope * 2 + prv))
+    {
+        Assert.Equal(2, state);
+        Assert.Equal(2, d1.State);
+    }
+    Assert.Equal(14, d1.State); // the state which was calculate when the scope ends
+    using (var state = d1.Push(m => m * 2)) // calculate from current state
+    {
+        Assert.Equal(28, state);
+    }
+    Assert.Equal(14, d1.State);
+    using (var state = d1.Push(m => m * 2))
+    {
+        Assert.Equal(28, d1.State);
+        using (var state1 = d1.Push(m => m * 2, (prv, inScope) => inScope + 1))
+        {
+            Assert.Equal(56, state1);
+        }
+        Assert.Equal(57, d1.State);
+    }
+    Assert.Equal(14, d1.State);
+    Assert.False(d1.IsDisposed);
 }
+Assert.True(d1.IsDisposed);
 ```
 
 </blockquote>

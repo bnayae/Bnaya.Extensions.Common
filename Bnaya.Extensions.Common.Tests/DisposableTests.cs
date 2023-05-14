@@ -65,21 +65,26 @@ namespace Bnaya.Extensions.Common.Tests
             using (d1 = Disposable.CreateStack<int>(10))
             {
                 Assert.Equal(10, d1.State);
-                using (d1.Push(50))
+                using (var state = d1.Push(50))
                 {
                     Assert.Equal(50, d1.State);
+                    Assert.Equal(50, state.State);
+                    int i = state;
+                    Assert.Equal(50, i);
                 }
-                using (d1.Push(2, (prv, inScope) => inScope * 2 + prv))
+                using (var state = d1.Push(2, (prv, inScope) => inScope * 2 + prv))
                 {
+                    Assert.Equal(2, state);
                     Assert.Equal(2, d1.State);
                 }
                 Assert.Equal(14, d1.State); // the state which was calculate when the scope ends
-                using (d1.Push(m => m * 2)) // calculate from current state
+                using (var state = d1.Push(m => m * 2)) // calculate from current state
                 {
+                    Assert.Equal(28, state);
                     Assert.Equal(28, d1.State);
                 }
                 Assert.Equal(14, d1.State);
-                using (d1.Push(m => m * 2))
+                using (var state = d1.Push(m => m * 2))
                 {
                     Assert.Equal(28, d1.State);
                     using (d1.Push(m => m * 2, (prv, inScope) => inScope + 1))
