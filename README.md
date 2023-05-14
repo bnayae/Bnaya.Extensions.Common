@@ -4,7 +4,8 @@
 
 [![NuGet](https://img.shields.io/nuget/v/Bnaya.Extensions.Common.svg)](https://www.nuget.org/packages/Bnaya.Extensions.Common/)  
 
-[![codecov](https://codecov.io/gh/bnayae/Bnaya.Extensions.Common/branch/main/graph/badge.svg?token=W85TL1QVQB)](https://codecov.io/gh/bnayae/Bnaya.Extensions.Common)
+[![codecov](https://codecov.io/gh/bnayae/Bnaya.Extensions.Common/branch/main/graph/badge.svg?token=W85TL1QVQB)](https://codecov.io/gh/bnayae/Bnaya.Extensions.Common)  
+https://codecov.io/gh/bnayae/Bnaya.Extensions.Common/branch/main/graphs/tree.svg?token=W85TL1QVQB
 
 Set of basic extensions. 
 
