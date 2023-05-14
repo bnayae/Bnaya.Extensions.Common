@@ -10,15 +10,25 @@ namespace Bnaya.Extensions.Common.Disposables
 {
     public static class AsyncDisposable
     {
+        #region Nop
+
         public static IAsyncDisposable Nop { get; } = new NopAsyncDisposable();
+
+        #endregion // Nop
+
+        #region Create
 
         public static IAsyncDisposable Create(Func<ValueTask> dispose, bool useFinalizerTrigger = false)
         {
             if (dispose == null)
                 throw new ArgumentNullException(nameof(dispose));
 
-            return new AnonymousAsyncDisposable(dispose);
+            return new AnonymousAsyncDisposable(dispose, useFinalizerTrigger);
         }
+
+        #endregion // Create
+
+        #region AnonymousAsyncDisposable
 
         private sealed class AnonymousAsyncDisposable : IAsyncDisposable
         {
@@ -41,9 +51,15 @@ namespace Bnaya.Extensions.Common.Disposables
             ~AnonymousAsyncDisposable() => DisposeAsync().GetAwaiter().GetResult();
         }
 
+        #endregion // AnonymousAsyncDisposable
+
+        #region NopAsyncDisposable
+
         private sealed class NopAsyncDisposable : IAsyncDisposable
         {
             public ValueTask DisposeAsync() => default;
         }
+
+        #endregion // NopAsyncDisposable
     }
 }

@@ -15,14 +15,3 @@ public interface ICancelable : IDisposable
     /// </summary>
     bool IsDisposed { get; }
 }
-
-/// <summary>
-/// Disposable resource with disposal state tracking.
-/// </summary>
-public interface ICancelable<TState> : ICancelable
-{
-    /// <summary>
-    /// Gets or Set the state.
-    /// </summary>
-    TState State { get; set; }
-}

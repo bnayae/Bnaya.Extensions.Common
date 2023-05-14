@@ -82,7 +82,7 @@ namespace Bnaya.Extensions.Common.Disposables
         /// </returns>
         /// <exception cref="System.ArgumentNullException">dispose</exception>
         /// <exception cref="ArgumentNullException"><paramref name="dispose" /> is <c>null</c>.</exception>
-        public static ICancelable<TState> Create<TState>(TState state, Action<TState>? dispose = null, bool useFinalizerTrigger = false)
+        public static CancelableBase<TState> Create<TState>(TState state, Action<TState>? dispose = null, bool useFinalizerTrigger = false)
         {
             Action<TState> cleanup = dispose ?? ((_) => { });
 
@@ -90,6 +90,8 @@ namespace Bnaya.Extensions.Common.Disposables
         }
 
         #endregion // Create
+
+        #region CreateStack
 
         /// <summary>
         /// Creates a disposable object that invokes the specified action when disposed.
@@ -102,11 +104,13 @@ namespace Bnaya.Extensions.Common.Disposables
         /// </returns>
         /// <exception cref="System.ArgumentNullException">dispose</exception>
         /// <exception cref="ArgumentNullException"><paramref name="dispose" /> is <c>null</c>.</exception>
-        public static IStackCancelable<TState> CreateStack<TState>(TState state, Action<TState>? dispose = null)
+        public static StackCancelable<TState> CreateStack<TState>(TState state, Action<TState>? dispose = null)
         {
             Action<TState> cleanup = dispose ?? ((_) => { });
 
             return new StackDisposable<TState>(state, cleanup);
         }
+
+        #endregion // CreateStack
     }
 }

@@ -26,6 +26,8 @@ namespace Bnaya.Extensions.Common.Tests
 
         #endregion Ctor
 
+        #region Disposable_Create_Test
+
         [Fact]
         public void Disposable_Create_Test()
         {
@@ -39,6 +41,9 @@ namespace Bnaya.Extensions.Common.Tests
                 .MustHaveHappenedOnceExactly();
         }
 
+        #endregion // Disposable_Create_Test
+
+        #region Disposable_Empty_Test
 
         [Fact]
         public void Disposable_Empty_Test()
@@ -49,10 +54,14 @@ namespace Bnaya.Extensions.Common.Tests
             }
         }
 
+        #endregion // Disposable_Empty_Test
+
+        #region DisposableStack_Test
+
         [Fact]
         public void DisposableStack_Test()
         {
-            IStackCancelable<int> d1;
+            StackCancelable<int> d1;
             using (d1 = Disposable.CreateStack<int>(10))
             {
                 Assert.Equal(10, d1.State);
@@ -84,5 +93,7 @@ namespace Bnaya.Extensions.Common.Tests
             }
             Assert.True(d1.IsDisposed);
         }
+
+        #endregion // DisposableStack_Test
     }
 }

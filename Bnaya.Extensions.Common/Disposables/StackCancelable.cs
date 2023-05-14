@@ -9,7 +9,7 @@ namespace Bnaya.Extensions.Common.Disposables;
 /// Disposable stack capable of pushing new disposable to the top of the stack 
 /// </summary>
 /// <typeparam name="TState">The type of the state.</typeparam>
-public interface IStackCancelable<TState>: ICancelable<TState> 
+public abstract class StackCancelable<TState>: CancelableBase<TState> 
 {
     /// <summary>
     /// Pushes a disposable to the top of the stack.
@@ -25,7 +25,7 @@ public interface IStackCancelable<TState>: ICancelable<TState>
     /// return the value which will be set to the previous disposal after it become the current again
     /// </param>
     /// <returns></returns>
-    IDisposable Push(
+    public abstract CancelableBase<TState> Push(
         Func<TState, TState>? state = null, 
         Func<TState, TState, TState>? dispose = null);
 
@@ -42,9 +42,7 @@ public interface IStackCancelable<TState>: ICancelable<TState>
     /// return the value which will be set to the previous disposal after it become the current again
     /// </param>
     /// <returns></returns>
-    IDisposable Push(
+    public abstract CancelableBase<TState> Push(
         TState state, 
         Func<TState, TState, TState>? dispose = null);
 }
-
-

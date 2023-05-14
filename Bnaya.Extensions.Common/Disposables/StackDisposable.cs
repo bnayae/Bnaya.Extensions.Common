@@ -9,10 +9,13 @@ namespace Bnaya.Extensions.Common.Disposables;
 /// Stack of disposables
 /// </summary>
 /// <typeparam name="TState">The type of the state.</typeparam>
-/// <seealso cref="Bnaya.Extensions.Common.Disposables.IStackCancelable&lt;TState&gt;" />
-internal sealed class StackDisposable<TState> : IStackCancelable<TState>
+/// <seealso cref="Bnaya.Extensions.Common.Disposables.StackCancelable&lt;TState&gt;" />
+/// <remarks>
+/// Not thread safe: won't work well under multi thread environment (without proper synchronization).
+/// </remarks>
+internal sealed class StackDisposable<TState> : StackCancelable<TState>
 {
-    private record StackItem(ICancelable<TState> Instance, Func<TState, TState, TState>? Restate = null);
+    private sealed record StackItem(CancelableBase<TState> Instance, Func<TState, TState, TState>? Restate = null);
     private readonly Stack<StackItem> _stack = new Stack<StackItem>();
 
     #region Ctor
@@ -36,11 +39,7 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
     /// <summary>
     /// Gets or Set the state.
     /// </summary>
-    public TState State
-    {
-        get => Current.State;
-        set => Current.State = value;
-    }
+    public override TState State { get => Current.State; internal set => Current.State = value; }
 
     #endregion // State
 
@@ -57,7 +56,7 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
     /// return the value which will be set to the previous disposal after it become the current again</param>
     /// <returns></returns>
     /// <exception cref="System.ObjectDisposedException">StackDisposable</exception>
-    IDisposable IStackCancelable<TState>.Push(Func<TState, TState>? state, Func<TState, TState, TState>? dispose)
+    public override CancelableBase<TState> Push(Func<TState, TState>? state = null, Func<TState, TState, TState>? dispose = null)
     {
         if (IsDisposed)
             throw new ObjectDisposedException(nameof(StackDisposable<TState>));
@@ -68,7 +67,6 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
         _stack.Push(new StackItem(newDisposable, dispose));
 
         return this;
-
     }
 
     /// <summary>
@@ -82,7 +80,7 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
     /// return the value which will be set to the previous disposal after it become the current again
     /// </param>
     /// <returns></returns>
-    IDisposable IStackCancelable<TState>.Push(TState state, Func<TState, TState, TState>? dispose)
+    public override CancelableBase<TState> Push(TState state, Func<TState, TState, TState>? dispose = null)
     {
         if (IsDisposed)
             throw new ObjectDisposedException(nameof(StackDisposable<TState>));
@@ -92,7 +90,6 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
         _stack.Push(new StackItem(newDisposable, dispose));
 
         return this;
-
     }
 
     #endregion // Push
@@ -102,7 +99,7 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
     /// <summary>
     /// Gets a value that indicates whether the object is disposed.
     /// </summary>
-    public bool IsDisposed => _stack.Count == 0;
+    public override bool IsDisposed => _stack.Count == 0;
 
     #endregion // IsDisposed
 
@@ -111,7 +108,7 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
     /// <summary>
     /// Sets the current.
     /// </summary>
-    private ICancelable<TState> Current => _stack.Peek().Instance;
+    private CancelableBase<TState> Current => _stack.Peek().Instance;
 
     #endregion // Current
 
@@ -120,7 +117,7 @@ internal sealed class StackDisposable<TState> : IStackCancelable<TState>
     /// <summary>
     /// Calls the disposal action if and only if the current instance hasn't been disposed yet.
     /// </summary>
-    public void Dispose()
+    protected override void Dispose(bool disposing)
     {
         var prevItem = _stack.Pop();
         var prev = prevItem.Instance;

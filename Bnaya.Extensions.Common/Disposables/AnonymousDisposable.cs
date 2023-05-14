@@ -47,10 +47,21 @@ internal sealed class AnonymousDisposable : ICancelable
 /// <summary>
 /// Represents a Action-based disposable that can hold onto some state.
 /// </summary>
-internal sealed class AnonymousDisposable<TState> : ICancelable<TState>
+internal sealed class AnonymousDisposable<TState> : CancelableBase<TState>
 {
-    public TState State { get; set; }
+    /// <summary>
+    /// The dispose
+    /// </summary>
     private volatile Action<TState>? _dispose;
+
+    #region State
+
+    /// <summary>
+    /// Gets or sets the state.
+    /// </summary>
+    public override TState State { get; internal set; }
+
+    #endregion // State
 
     #region Ctor
 
@@ -63,38 +74,26 @@ internal sealed class AnonymousDisposable<TState> : ICancelable<TState>
     public AnonymousDisposable(TState state, Action<TState>? dispose, bool useFinalizerTrigger = false)
     {
         if (!useFinalizerTrigger)
+        {
+#pragma warning disable S3971
             GC.SuppressFinalize(this);
+#pragma warning restore S3971
+        }
         State = state;
         _dispose = dispose;
     }
 
     #endregion // Ctor
 
-    #region IsDisposed
-
-    /// <summary>
-    /// Gets a value that indicates whether the object is disposed.
-    /// </summary>
-    public bool IsDisposed => _dispose == null;
-
-    #endregion // IsDisposed
-
-    #region Dispose Pattern
-
-    /// <summary>
-    /// Finalizes an instance of the <see cref="AnonymousDisposable{TState}"/> class.
-    /// </summary>
-    ~AnonymousDisposable() => Dispose();
+    #region Dispose
 
     /// <summary>
     /// Calls the disposal action if and only if the current instance hasn't been disposed yet.
     /// </summary>
-    public void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        GC.SuppressFinalize(this);
         Interlocked.Exchange(ref _dispose, null)?.Invoke(State);
-        State = default!;
     }
 
-    #endregion // Dispose Pattern
+    #endregion // Dispose
 }
