@@ -21,7 +21,7 @@ Set of basic extensions.
 
 ## Looking for other extensions?
 Check the following
-- [Json Extensions](https://github.com/bnayae/Bnaya.Extensions.Json)
+- [Bnaya.Extensions.Json](https://github.com/bnayae/Bnaya.Extensions.Json)
 - [Async extensions](https://github.com/bnayae/Bnaya.CSharp.AsyncExtensions)
 
 ## Examples
